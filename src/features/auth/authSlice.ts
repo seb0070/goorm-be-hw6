@@ -3,18 +3,19 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface AuthUser {
   uid: string
+  displayName: string | null
   email: string | null
 }
 
 interface AuthState {
+  status: 'loading' | 'authenticated' | 'unauthenticated'
   user: AuthUser | null
-  status: 'idle' | 'loading' | 'error'
   error: string | null
 }
 
 const initialState: AuthState = {
+  status: 'loading',
   user: null,
-  status: 'idle',
   error: null,
 }
 
@@ -22,16 +23,20 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setUser(state, action: PayloadAction<AuthUser | null>) {
+    /** onAuthStateChanged 콜백 결과 반영. user가 있으면 authenticated, 없으면 unauthenticated */
+    setSession(state, action: PayloadAction<AuthUser | null>) {
       state.user = action.payload
-      state.status = 'idle'
+      state.status = action.payload ? 'authenticated' : 'unauthenticated'
       state.error = null
     },
-    clearUser(state) {
-      state.user = null
+    setAuthError(state, action: PayloadAction<string>) {
+      state.error = action.payload
+    },
+    clearAuthError(state) {
+      state.error = null
     },
   },
 })
 
-export const { setUser, clearUser } = authSlice.actions
+export const { setSession, setAuthError, clearAuthError } = authSlice.actions
 export default authSlice.reducer

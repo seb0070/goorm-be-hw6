@@ -11,19 +11,17 @@ cp .env.example .env.local   # Firebase 콘솔에서 발급받은 값 채우기
 npm run dev
 ```
 
-## 오늘(Day 1) 완료 항목
+## 완료 항목
 
 - [x] Vite + React + TypeScript 프로젝트 스캐폴딩
 - [x] Redux Toolkit 스토어 구성 (`auth`, `cart`, `productsApi`)
 - [x] react-router-dom 라우팅 골격 (`/`, `/product/:id`, `/login`, `/cart`)
-- [x] Fake Store API 연동 — 상품 목록 페이지(로딩/에러/빈 상태 처리 포함)
-- [x] Firebase 초기화 코드 자리 (`src/firebase/config.ts`) — 콘솔 세팅 전이라 값은 비어 있음
-- [x] 로그인 폼 UI 스켈레톤 (제출 로직은 스텁)
-- [x] 장바구니 슬라이스 상태 shape만 정의 (리듀서 로직은 Day 6 예정)
+- [x] Fake Store API 연동 — 상품 목록 페이지(로딩/에러/빈 상태 처리, 실패 시 mock 대체)
+- [x] 장바구니 담기/수량변경/삭제 (Redux Toolkit, `src/features/cart`)
+- [x] Firebase Authentication — Google 로그인/로그아웃, 인증 상태(`loading`/`authenticated`/`unauthenticated`) 반영, 실패 안내
 
 ## 다음 세션 TODO
 
-- Firebase 콘솔에서 프로젝트 생성 + Authentication(이메일/비밀번호) 활성화 → `.env.local`에 값 채우기
-- `src/firebase/config.ts`를 이용해 `authSlice`/`LoginPage`에 실제 로그인 로직 연결
+- Firebase 콘솔에서 프로젝트 생성 + Authentication에서 Google 로그인 활성화 → `.env.local`에 실제 값 채우기 (현재는 값이 비어 있어 로그인 버튼을 눌러도 동작하지 않음)
 - 상품 상세 페이지(`src/routes/ProductDetailPage.tsx`) 구현
-- 장바구니 담기/삭제/수량변경 리듀서 구현 (`src/features/cart/cartSlice.ts`)
+- 장바구니/로그인 페이지 접근 제어(비로그인 시 리다이렉트) 여부 결정

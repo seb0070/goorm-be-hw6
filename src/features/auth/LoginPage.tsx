@@ -1,38 +1,33 @@
 import { useState } from 'react'
-import type { FormEvent } from 'react'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { signInWithGoogle } from '../../firebase/googleAuth'
+import { clearAuthError, setAuthError } from './authSlice'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const dispatch = useAppDispatch()
+  const error = useAppSelector((state) => state.auth.error)
+  const [isSigningIn, setIsSigningIn] = useState(false)
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    // TODO: Firebase 콘솔 세팅 후 signInWithEmailAndPassword 연결
-    console.log('login submit (stub)', { email, password })
+  const handleGoogleLogin = async () => {
+    dispatch(clearAuthError())
+    setIsSigningIn(true)
+    try {
+      await signInWithGoogle()
+      // 성공 시 authListener의 onAuthStateChanged가 상태를 authenticated로 갱신함
+    } catch {
+      dispatch(setAuthError('Google 로그인에 실패했습니다. 다시 시도해 주세요.'))
+    } finally {
+      setIsSigningIn(false)
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
       <h1>로그인</h1>
-      <label>
-        이메일
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        비밀번호
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </label>
-      <button type="submit">로그인</button>
-    </form>
+      <button type="button" onClick={handleGoogleLogin} disabled={isSigningIn}>
+        {isSigningIn ? '로그인 중...' : 'Google로 로그인'}
+      </button>
+      {error && <p role="alert">{error}</p>}
+    </div>
   )
 }
