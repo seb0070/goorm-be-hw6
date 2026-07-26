@@ -22,12 +22,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
-      <h1>로그인</h1>
-      <button type="button" onClick={handleGoogleLogin} disabled={isSigningIn}>
-        {isSigningIn ? '로그인 중...' : 'Google로 로그인'}
-      </button>
-      {error && <p role="alert">{error}</p>}
+    <div className="login-page">
+      <div className="login-card">
+        <h1>로그인</h1>
+        <button
+          type="button"
+          className="btn btn-google"
+          onClick={handleGoogleLogin}
+          disabled={isSigningIn}
+        >
+          {isSigningIn ? '로그인 중...' : 'Google로 로그인'}
+        </button>
+        {error && (
+          <p className="form-error" role="alert">
+            {error}
+          </p>
+        )}
+      </div>
     </div>
   )
 }
