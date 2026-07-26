@@ -1,5 +1,7 @@
 import type { SyntheticEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { useAppDispatch } from '../../app/hooks'
+import { addItem } from '../cart/cartSlice'
 import { useGetProductsQuery } from './productsApi'
 import { mockProducts } from './mockProducts'
 
@@ -12,6 +14,7 @@ function handleImageError(e: SyntheticEvent<HTMLImageElement>) {
 }
 
 export default function ProductListPage() {
+  const dispatch = useAppDispatch()
   const { data, isLoading, isError, isSuccess } = useGetProductsQuery()
 
   if (isLoading) {
@@ -44,6 +47,12 @@ export default function ProductListPage() {
               <span>{product.category}</span>
               <span>${product.price.toFixed(2)}</span>
             </Link>
+            <button
+              type="button"
+              onClick={() => dispatch(addItem({ productId: product.id }))}
+            >
+              담기
+            </button>
           </li>
         ))}
       </ul>
